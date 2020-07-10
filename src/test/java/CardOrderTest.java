@@ -4,14 +4,13 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.Keys.chord;
 
 public class CardOrderTest {
 
-    LocalDatePlusFourDay currentDatePlusFourDay = new LocalDatePlusFourDay();
+    LocalDatePlusSevenDays currentDatePlusFourDay = new LocalDatePlusSevenDays();
     public String currentDate = currentDatePlusFourDay.localDate();
     public String selectAll = chord(Keys.CONTROL, "a");
     public Keys del = Keys.DELETE;
