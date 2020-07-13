@@ -1,5 +1,6 @@
 package ru.netology;
 
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
@@ -14,10 +15,18 @@ import static org.openqa.selenium.Keys.chord;
 
 
 public class CardOrderTest {
-    public String selectAll = chord(Keys.CONTROL, "a");
-    public Keys del = Keys.DELETE;
 
-    public String CurrentDatePlusDays() {
+    String selectAll = chord(Keys.CONTROL, "a");
+    Keys del = Keys.DELETE;
+
+    SelenideElement cityField = $("[data-test-id=city] input");
+    SelenideElement dateField = $("[data-test-id=date] input");
+    SelenideElement nameField = $("[data-test-id=name] input");
+    SelenideElement phoneField = $("[data-test-id=phone] input");
+    SelenideElement checkbox = $("[data-test-id=agreement]");
+    SelenideElement BookButton = $$(".form button").find(text("Забронировать"));
+
+    String CurrentDatePlusDays() {
         final String dateFormatWithDots = "dd.MM.yyyy";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormatWithDots);
 
@@ -35,78 +44,78 @@ public class CardOrderTest {
 
     @Test
     void shouldSuccessfulMeetingReservationTest() {
-        $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        $("[class='input__control'][type=tel][maxlength='10']").sendKeys(selectAll, del);
-        $("[class='input__control'][type=tel][maxlength='10']").setValue(CurrentDatePlusDays());
-        $("[data-test-id=name] input").setValue("Иванов Иван");
-        $("[data-test-id=phone] input").setValue("+79281234567");
-        $("[data-test-id=agreement]").click();
-        $$(".form button").find(text("Забронировать")).click();
+        cityField.setValue("Санкт-Петербург");
+        dateField.sendKeys(selectAll, del);
+        dateField.setValue(CurrentDatePlusDays());
+        nameField.setValue("Иванов Иван");
+        phoneField.setValue("+79281234567");
+        checkbox.click();
+        BookButton.click();
         $(withText("Успешно!")).waitUntil(visible, 15000);
         $("[data-test-id=notification]").shouldHave(text("Встреча успешно забронирована на"));
         $("[data-test-id=notification]").shouldHave(text(CurrentDatePlusDays()));
     }
 
     @Test
-    void shouldWithoutCity(){
-        $("[class='input__control'][type=tel][maxlength='10']").sendKeys(selectAll, del);
-        $("[class='input__control'][type=tel][maxlength='10']").setValue(CurrentDatePlusDays());
-        $("[data-test-id=name] input").setValue("Иванов Иван");
-        $("[data-test-id=phone] input").setValue("+79281234567");
-        $("[data-test-id=agreement]").click();
-        $$(".form button").find(text("Забронировать")).click();
+    void shouldCityFieldIsRequired() {
+        dateField.sendKeys(selectAll, del);
+        dateField.setValue(CurrentDatePlusDays());
+        nameField.setValue("Иванов Иван");
+        phoneField.setValue("+79281234567");
+        checkbox.click();
+        BookButton.click();
         $(".input_invalid[data-test-id=city]").shouldHave(text("Поле обязательно для заполнения"));
         $(".input_invalid[data-test-id=city]").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
         $(withText("Успешно!")).waitUntil(hidden, 15000);
     }
     @Test
-    void shouldWithoutDate(){
-        $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        $("[class='input__control'][type=tel][maxlength='10']").sendKeys(selectAll, del);
-        $("[data-test-id=name] input").setValue("Иванов Иван");
-        $("[data-test-id=phone] input").setValue("+79281234567");
-        $("[data-test-id=agreement]").click();
-        $$(".form button").find(text("Забронировать")).click();
+    void shouldDateFieldIsRequired(){
+        cityField.setValue("Санкт-Петербург");
+        dateField.sendKeys(selectAll, del);
+        dateField.setValue("Иванов Иван");
+        phoneField.setValue("+79281234567");
+        checkbox.click();
+        BookButton.click();
         $(".calendar-input__custom-control").shouldHave(text("Неверно введена дата"));
         $(".calendar-input__custom-control").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
         $(withText("Успешно!")).waitUntil(hidden, 15000);
     }
 
     @Test
-    void shouldWithoutName(){
-        $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        $("[class='input__control'][type=tel][maxlength='10']").sendKeys(selectAll, del);
-        $("[class='input__control'][type=tel][maxlength='10']").setValue(CurrentDatePlusDays());
-        $("[data-test-id=phone] input").setValue("+79281234567");
-        $("[data-test-id=agreement]").click();
-        $$(".form button").find(text("Забронировать")).click();
+    void shouldNameFieldIsRequired(){
+        cityField.setValue("Санкт-Петербург");
+        dateField.sendKeys(selectAll, del);
+        dateField.setValue(CurrentDatePlusDays());
+        phoneField.setValue("+79281234567");
+        checkbox.click();
+        BookButton.click();
         $("[data-test-id=name]").shouldHave(text("Поле обязательно для заполнения"));
         $("[data-test-id=name]").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
         $(withText("Успешно!")).waitUntil(hidden, 15000);
     }
 
     @Test
-    void shouldWithoutTel(){
-        $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        $("[class='input__control'][type=tel][maxlength='10']").sendKeys(selectAll, del);
-        $("[class='input__control'][type=tel][maxlength='10']").setValue(CurrentDatePlusDays());
-        $("[data-test-id=name] input").setValue("Иванов Иван");
-        $("[data-test-id=agreement]").click();
-        $$(".form button").find(text("Забронировать")).click();
+    void shouldTelFieldIsRequired(){
+        cityField.setValue("Санкт-Петербург");
+        dateField.sendKeys(selectAll, del);
+        dateField.setValue(CurrentDatePlusDays());
+        nameField.setValue("Иванов Иван");
+        checkbox.click();
+        BookButton.click();
         $("[data-test-id=phone]").shouldHave(text("Поле обязательно для заполнения"));
         $("[data-test-id=phone]").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
         $(withText("Успешно!")).waitUntil(hidden, 15000);
     }
 
     @Test
-    void shouldWithoutCheckbox(){
-        $("[data-test-id=city] input").setValue("Санкт-Петербург");
-        $("[class='input__control'][type=tel][maxlength='10']").sendKeys(selectAll, del);
-        $("[class='input__control'][type=tel][maxlength='10']").setValue(CurrentDatePlusDays());
-        $("[data-test-id=name] input").setValue("Иванов Иван");
-        $("[data-test-id=phone] input").setValue("+79281234567");
-        $$(".form button").find(text("Забронировать")).click();
-        $("[data-test-id=agreement]").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
+    void shouldCheckboxFieldIsRequired(){
+        cityField.setValue("Санкт-Петербург");
+        dateField.sendKeys(selectAll, del);
+        dateField.setValue(CurrentDatePlusDays());
+        nameField.setValue("Иванов Иван");
+        phoneField.setValue("+79281234567");
+        BookButton.click();
+        checkbox.shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
         $(withText("Успешно!")).waitUntil(hidden, 15000);
     }
 }
