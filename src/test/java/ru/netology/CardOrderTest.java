@@ -65,19 +65,19 @@ public class CardOrderTest {
         checkbox.click();
         BookButton.click();
         $(".input_invalid[data-test-id=city]").shouldHave(text("Поле обязательно для заполнения"));
-        $(".input_invalid[data-test-id=city]").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
+        $(".input_invalid").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
         $(withText("Успешно!")).waitUntil(hidden, 15000);
     }
     @Test
     void shouldDateFieldIsRequired(){
         cityField.setValue("Санкт-Петербург");
         dateField.sendKeys(selectAll, del);
-        dateField.setValue("Иванов Иван");
+        nameField.setValue("Иванов Иван");
         phoneField.setValue("+79281234567");
         checkbox.click();
         BookButton.click();
         $(".calendar-input__custom-control").shouldHave(text("Неверно введена дата"));
-        $(".calendar-input__custom-control").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
+        $(".input_invalid").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
         $(withText("Успешно!")).waitUntil(hidden, 15000);
     }
 
@@ -90,7 +90,7 @@ public class CardOrderTest {
         checkbox.click();
         BookButton.click();
         $("[data-test-id=name]").shouldHave(text("Поле обязательно для заполнения"));
-        $("[data-test-id=name]").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
+        $(".input_invalid").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
         $(withText("Успешно!")).waitUntil(hidden, 15000);
     }
 
@@ -103,7 +103,7 @@ public class CardOrderTest {
         checkbox.click();
         BookButton.click();
         $("[data-test-id=phone]").shouldHave(text("Поле обязательно для заполнения"));
-        $("[data-test-id=phone]").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
+        $(".input_invalid").shouldHave(cssValue("color", "rgba(255, 92, 92, 1)"));
         $(withText("Успешно!")).waitUntil(hidden, 15000);
     }
 
